@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>GlossFile - Ayarlar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+      :root{
+        --gf-bg: #02142c;
+        --gf-card: #071f3e;
+        --gf-card-shadow: rgba(0,0,0,0.45);
+        --gf-border: #102347;
+        --gf-text-main: #ffffff;
+        --gf-text-muted: #c3ccdd;
+        --gf-input-bg: #0c244b;
+        --gf-pink: #ff69b4;
+        --gf-red: #ff4b5c;
+      }
+
+      *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      }
+
+      body{
+        min-height:100vh;
+        background: var(--gf-bg);
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        color: var(--gf-text-main);
+      }
+
+      .settings-shell{
+        width: 100%;
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 24px 28px 28px;
+        background: var(--gf-card);
+        border-radius: 24px;
+        box-shadow: 0 18px 35px var(--gf-card-shadow);
+        border: 1px solid var(--gf-border);
+      }
+
+      .settings-title{
+        text-align: center;
+        margin-bottom: 24px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .settings-row{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .settings-row.full{
+        grid-template-columns: minmax(0,1fr);
+      }
+
+      .settings-card{
+        background: var(--gf-card);
+        border-radius: 18px;
+        border: 1px solid var(--gf-border);
+        padding: 16px 18px 14px;
+        box-shadow: 0 14px 30px var(--gf-card-shadow);
+      }
+
+      .settings-card h2{
+        font-size: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap:6px;
+      }
+
+      .settings-card h2 span.icon{
+        font-size: 17px;
+      }
+
+      .settings-card h2 span.title{
+        font-weight: 600;
+      }
+
+      .form-group{
+        display:flex;
+        flex-direction: column;
+        gap:4px;
+        margin-bottom: 10px;
+        font-size:13px;
+      }
+
+      .form-group input{
+        background: var(--gf-input-bg);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.18);
+        padding: 7px 10px;
+        font-size: 13px;
+        color:var(--gf-text-main);
+        outline: none;
+      }
+
+      .form-group input::placeholder{
+        color: rgba(255,255,255,0.45);
+      }
+
+      .btn{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .btn-pink{
+        background: var(--gf-pink);
+        color: #ffffff;
+      }
+
+      .btn-red{
+        background: var(--gf-red);
+        color: #fff;
+      }
+
+      .checkbox-list{
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .checkbox-item{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .danger-text{
+        font-size: 13px;
+        margin-bottom: 10px;
+        color: var(--gf-text-muted);
+      }
+
+      .settings-topbar{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom:12px;
+        font-size: 13px;
+      }
+
+      .back-link{
+        color:var(--gf-text-muted);
+        text-decoration: none;
+      }
+      .back-link:hover{
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px){
+        .settings-row{
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="settings-shell">
+      <div class="settings-topbar">
+        <a href="dashboard.html" class="back-link" data-i18n="settings.back">Geri Dön</a>
+      </div>
+
+      <h1 class="settings-title" data-i18n="settings.title">Ayarlar</h1>
+
+      <div class="settings-row">
+        <!-- Hesap -->
+        <section class="settings-card">
+          <h2>
+            <span class="title" data-i18n="settings.account.title">Hesap Bilgileri</span>
+            <span class="icon">👤</span>
+          </h2>
+
+          <div class="form-group">
+            <label for="username" data-i18n="settings.account.username">Kullanıcı Adı</label>
+            <input id="username" type="text" data-i18n-placeholder="settings.account.usernamePlaceholder" placeholder="Kullanıcı Adın">
+          </div>
+
+          <div class="form-group">
+            <label for="email" data-i18n="settings.account.email">E-posta</label>
+            <input id="email" type="email" data-i18n-placeholder="settings.account.emailPlaceholder" placeholder="E-posta adresin">
+          </div>
+
+          <button id="btn-account-save" class="btn btn-pink" data-i18n="common.save">Kaydet</button>
+        </section>
+
+        <!-- Bildirimler -->
+        <section class="settings-card">
+          <h2>
+            <span class="title" data-i18n="settings.notifications.title">Bildirimler</span>
+            <span class="icon">🔔</span>
+          </h2>
+
+          <div class="checkbox-list">
+            <div class="checkbox-item">
+              <input id="notify-upload" type="checkbox" />
+              <label for="notify-upload" data-i18n="settings.notifications.onUpload">Dosya Yüklenince Bildir</label>
+            </div>
+
+            <div class="checkbox-item">
+              <input id="notify-share" type="checkbox" />
+              <label for="notify-share" data-i18n="settings.notifications.onShare">Paylaşım Oluşturulunca Bildir</label>
+            </div>
+          </div>
+
+          <button id="btn-notify-save" class="btn btn-pink" data-i18n="common.update">Güncelle</button>
+        </section>
+      </div>
+
+      <div class="settings-row full">
+        <!-- Hesabı kapat -->
+        <section class="settings-card">
+          <h2>
+            <span class="title" data-i18n="settings.danger.title">Hesabı Kapat</span>
+            <span class="icon">⚠️</span>
+          </h2>
+
+          <p class="danger-text" data-i18n="settings.danger.text">
+            Bu işlem geri alınamaz. Hesabını silmek istiyor musun?
+          </p>
+          <button id="btn-delete-account" class="btn btn-red" data-i18n="settings.danger.delete">Hesabımı Sil</button>
+        </section>
+      </div>
+    </div>
+
+    <script src="settings.js"></script>
+  </body>
+</html>

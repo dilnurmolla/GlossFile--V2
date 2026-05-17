@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <head>
+        <meta charset="utf-8">
+        <title>GlossFile - Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            .hidden{
+                display:none !important;
+            }
+
+            :root{
+                --gf-bg-main: #02142c;
+                --gf-bg-sidebar: #031b3a;
+                --gf-text-main: #ffffff;
+                --gf-text-muted: #b3bfd9;
+                --gf-pink: #ff69b4;
+                --brand:#EED0F0;
+
+                --gf-card-bg: #071f3e;
+                --gf-card-border: rgba(255,255,255,0.06);
+            }
+
+        *{
+            box-sizing: border-box;
+            margin:0;
+            padding:0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body{
+            background:var(--gf-bg-main);
+            color: var(--gf-text-main);
+            min-height:100vh;
+        }
+
+        .layout{
+            display: flex;
+            min-height:100vh;
+        }
+
+        .sidebar{
+            width: 240px;
+            background: var(--gf-bg-sidebar);
+            padding: 24px 20px;
+
+            display:flex;
+            flex-direction:column;
+            gap:24px;
+        }
+
+        .logo{
+            font-weight:700;
+            font-size: 18px;
+            letter-spacing: 1px;
+            color: var(--brand);
+        }
+
+        .nav{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .nav-bottom{
+            margin-top:auto;
+        }
+
+        .nav-item{
+            display:block;
+            padding:10px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--gf-text-muted);
+            font-size: 14px;
+            transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+        }
+        
+        .nav-item:hover{
+            background:rgba(255,255,255,0.06);
+            color: var(--gf-text-main);
+            transform: translateX(2px);
+        }
+
+        .nav-item.active{
+            background:rgba(255,105,180,0.15);
+            color: var(--gf-pink);
+        }
+
+        .content{
+            flex: 1;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction:column;
+            gap: 24px;
+        }
+        .content-header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+        }
+        .page-title h2{
+            font-size:22px;
+            margin-bottom:4px;
+        }
+        .page-subtitle{
+            font-size:13px;
+            color:var(--gf-text-muted);
+        }
+        .user-actions{
+            display:flex;
+            align-items: center;
+            gap:12px;
+        }
+        .user-name{
+            font-size:13px;
+            color:var(--gf-text-muted);
+        }
+        .btn-ghost, .btn-primary{
+            font-size:13px;
+            padding:8px 14px;
+            border-radius:999px;
+            border:1px solid transparent;
+            background: transparent;
+            color:var(--gf-text-main);
+            cursor:pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+        }
+        .btn-ghost{
+            border-color:rgba(255,255,255,0.25);
+        }
+        .btn-primary{
+            background:var(--gf-pink);
+            border-color:var(--gf-pink);
+            color:#fff;
+        }
+
+        .gf-lang-select{
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.18);
+  color: var(--gf-text-main);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+        .btn-ghost:hover{
+            background: rgba(255,255,255,0.08);
+            transform:translateY(-1px);
+        }
+        .btn-primary:hover{
+            opacity:0.9;
+            transform:translateY(-1px);
+        }
+        .content-body{
+            margin-top:8px;
+            display: flex;
+            flex-direction: column;
+            gap:24px;
+        }
+        .top-row{
+            display:flex;
+            align-items:stretch;
+            gap:16px;
+        }
+        .top-row-spacer{
+            flex: 1;
+        }
+        .storage-card{
+            display:flex;
+            align-items:center;
+            gap:16px;
+            padding:16px 20px;
+            border-radius:18px;
+            background:var(--gf-card-bg);
+            border:1px solid var(--gf-card-border);
+            min-width:260px;
+        }
+        .storage-text{
+            display:flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .storage-label{
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:0.08em;
+            color:var(--gf-text-muted);
+        }
+        .storage-amount{
+            font-size:16px;
+            font-weight:600;
+        }
+        .storage-subtext{
+            font-size:12px;
+            color:var(--gf-text-muted);
+        }
+        .storage-progress{
+        margin-left:auto;
+        }
+      
+        .placeholder-text{
+            font-size:14px;
+            color:var(--gf-text-muted);
+        }
+
+       .files-area{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+       }
+       .files-grid{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap:16px;
+       }
+       .file-card{
+        background:var(--gf-card-bg);
+        border:1px solid var(--gf-card-border);
+        border-radius:16px;
+        padding:12px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap:12px;
+        position:relative;
+       }
+       .file-menu-panel{
+        position:absolute;
+        top:42px;
+        right:10px;
+        background: var(--gf-card-bg);
+        border:1px solid var(--gf-card-border);
+        border-radius:12px;
+        padding:6px 0;
+        min-width:150px;
+        z-index:10;
+        box-shadow:0 8px 18px rgba(0,0,0,0.4);
+       }
+       .file-menu-item{
+        width:100%;
+        padding:6px 12px;
+        border:none;
+        background:transparent;
+        color: var(--gf-text-main);
+        font-size:13px;
+        text-align:left;
+        cursor:pointer;
+        display:block;
+       }
+       .file-menu-item:hover{
+       background:rgba(255,255,255,0.06);
+       }
+       .file-menu-danger{
+        color:#ff6b81;
+       }
+       .file-card.selected{
+        border-color: var(--gf-pink);
+        box-shadow: 0 0 0 1px rgba(255,105,180,0.4);
+       }
+
+       .file-main{
+        display:flex;
+        align-items:center;
+        gap:10px;
+       }
+       .file-icon{
+        width:40px;
+        height:40px;
+        border-radius:12px;
+        background:rgba(255,105,180, 0.18);
+        color: var(--gf-pink);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:11px;
+        font-weight:600;
+       }
+       .file-text{
+        display:flex;
+        flex-direction:column;
+        gap:2px;
+       }
+       .file-name{
+        font-size:14px;
+        font-weight:500;
+       }
+       .file-meta{
+        font-size:12px;
+        color:var(--gf-text-muted);
+       }
+       .file-menu{
+        border:none;
+        background:transparent;
+        color:var(--gf-text-muted);
+        font-size:16px;
+        cursor:pointer;
+        padding:4px 6px;
+        border-radius: 8px;
+        transition: background 0.15s ease, color 0.15s ease;
+       }
+       .file-menu:hover{
+        background:rgba(255,255,255,0.06);
+        color:var(--gf-text-main);
+       }
+       .bottom-actions{
+        margin-top:8px;
+        display:flex;
+        justify-content:center;
+       }
+       .btn-upload-main{
+        border:none;
+        border-radius:999px;
+        padding:10px 24px;
+        font-size:14px;
+        font-weight:500;
+        background:var(--gf-pink);
+        color:#fff;
+        cursor:pointer;
+        transition:opacity 0.15s ease, transform 0.08s ease;
+       }
+       .btn-upload-main:hover{
+        opacity:0.9;
+        transform:translateY(-1px);
+       }
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    overflow-x: auto;
+  }
+
+  .logo {
+    margin-right: 16px;
+    white-space: nowrap;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .nav-bottom {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .user-actions {
+    align-self: stretch;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .top-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .top-row-spacer {
+    display: none;
+  }
+
+  .storage-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title h2 {
+    font-size: 18px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+  }
+
+  .user-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-ghost,
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-upload-main {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.nav-section-label{
+    font-size:11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin: 10px 0 6px;
+}
+
+.upload-page-inner{
+    max-width: 640px;
+    margin-top: 16px;
+}
+.upload-card{
+    background: var(--gf-card-bg);
+    border-radius: 18px;
+    border: 1px dashed var(--gf-card-border);
+    padding: 24px 24px 20px;
+    text-align: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.upload-card.drag-over{
+    border-color: var(--gf-pink);
+    box-shadow: 0 0 0 1px rgba(255,105,180,0.4);
+    background: rgba(3,27,58,0.95);
+}
+.upload-icon{
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+.upload-main-text{
+    font-size:16px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+.upload-subtext{
+    font-size: 13px;
+    color: var(--gf-text-muted);
+    margin-bottom: 16px;
+
+}
+.upload-file-name{
+    margin-top:10px;
+    font-size: 13px;
+}
+.upload-hint{
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--gf-text-muted);
+}
+
+/* --- Shared page layout --- */
+.gf-shared-header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; }
+.gf-title { margin:0; font-size: 22px; }
+.gf-subtitle { margin:6px 0 0; opacity:.75; }
+
+.gf-shared-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 980px) { .gf-shared-grid { grid-template-columns: 1fr; } }
+
+.gf-panel { border-radius: 14px; padding: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+.gf-panel-head { margin-bottom: 12px; }
+.gf-panel-title { font-weight: 700; font-size: 16px; }
+.gf-panel-desc { margin-top: 4px; font-size: 12px; opacity: .75; }
+
+.gf-steps { display:flex; flex-direction:column; gap: 10px; }
+.gf-step { display:flex; gap: 10px; padding: 10px; border-radius: 12px; background: rgba(0,0,0,.12); border: 1px solid rgba(255,255,255,.06); }
+.gf-step-badge { width: 28px; height: 28px; border-radius: 999px; display:flex; align-items:center; justify-content:center; font-weight:700; background: rgba(255,255,255,.10); }
+.gf-step-body { flex:1; }
+.gf-step-title { font-weight: 700; margin-bottom: 8px; }
+
+.gf-input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); color: inherit; outline: none; }
+.gf-input:focus { border-color: rgba(255,255,255,.25); }
+
+.gf-row { display:flex; gap: 10px; align-items:center; margin-top: 10px; }
+.gf-help { margin-top: 8px; font-size: 12px; opacity: .75; }
+.gf-muted { opacity:.75; font-size: 13px; }
+
+.gf-btn { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: inherit; cursor:pointer; }
+.gf-btn:disabled { opacity: .5; cursor:not-allowed; }
+.gf-btn-primary { background: rgba(255,105,180,.25); border-color: rgba(255,105,180,.35); }
+.gf-btn-secondary { background: rgba(255,255,255,.06); }
+
+.gf-status { margin-top: 10px; font-size: 13px; }
+.gf-status.ok { color: #7CFFB2; }
+.gf-status.err { color: #FF7C7C; }
+
+/* --- File picker (my files) --- */
+.gf-share-files { display:flex; flex-direction:column; gap: 8px; max-height: 280px; overflow:auto; padding-right: 4px; }
+.gf-pick { display:flex; gap: 10px; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.12); cursor:pointer; }
+.gf-pick:hover { border-color: rgba(255,255,255,.18); }
+.gf-pick input { margin-top: 3px; }
+.gf-pick-main { flex:1; }
+.gf-pick-name { font-weight: 700; }
+.gf-pick-meta { margin-top: 4px; font-size: 12px; opacity:.75; }
+
+/* --- Inbox cards with letter avatar --- */
+.gf-inbox { display:flex; flex-direction:column; gap: 10px; max-height: 520px; overflow:auto; padding-right: 4px; }
+.gf-card { display:flex; gap: 12px; align-items:flex-start; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.12); }
+.gf-avatar {
+  width: 42px; height: 42px; border-radius: 999px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight: 800; letter-spacing: .5px;
+  background: rgba(255,255,255,.10);
+}
+.gf-card-main { flex:1; }
+.gf-card-title { font-weight: 800; }
+.gf-card-meta { margin-top: 4px; font-size: 12px; opacity:.75; }
+.gf-card-actions { display:flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.storage-ring{
+  --p: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: conic-gradient(#ff5aa5 calc(var(--p) * 1%), rgba(255,255,255,0.12) 0);
+}
+.storage-ring::before{
+  content:"";
+  position:absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #061228;
+}
+.progress-percent{
+  position: relative;
+  z-index: 1;
+}
+
+
+        </style>
+    </head>
+    <body>
+
+        <div class="layout">
+            <aside class="sidebar">
+<div class="logo">
+    GLOSSFILE
+</div>       
+     
+  <nav class="nav">
+    <a href="#" class="nav-item active" data-section="files" data-i18n="nav.files">Dosyalarım</a>
+    <a href="#" class="nav-item" data-section="upload" data-i18n="nav.upload">Yeni Dosya Yükle</a>
+    <a href="#" class="nav-item" data-section="shared" data-i18n="nav.shared">Paylaşılanlar</a>
+    <a href="#" class="nav-item" data-section="security" data-i18n="nav.security">Güvenlik</a>
+    <a href="settings.html" class="nav-item" data-i18n="nav.settings">Ayarlar</a>
+</nav>
+
+
+     <div class="nav-bottom">
+        <a href="admin.html" id="admin-link" class="nav-item hidden" data-i18n="nav.admin">Admin Paneli</a>
+     </div>
+     </aside>
+        
+        <main class="content">
+<header class="content-header">
+    <div class="page-title">
+        <h2 id="page-title" data-i18n="files.title">Dosyalarım</h2>
+        <p id="page-subtitle"class="page-subtitle" data-i18n="files.subtitle">
+            Bu cihazdaki şifreli dosyalarını buradan görüntüleyebilir, paylaşabilir ve yönetebilirsin
+        </p>
+    </div>
+
+<div class="user-actions">
+  <span id="welcome-user"></span>
+
+  <select id="gf-lang-select" class="gf-lang-select" aria-label="Dil">
+    <option value="tr-TR">TR</option>
+    <option value="en-US">EN</option>
+  </select>
+
+  <button id="logout-btn" class="btn-primary"></button>
+</div>
+
+    
+</header>        
+
+<section class="content-body gf-page" data-section="files">
+  <div class="top-row">
+    <div class="top-row-spacer"></div>
+
+    <div class="storage-card">
+      <div class="storage-text">
+        <span class="storage-label" data-i18n="storage.label">Depolama Kullanımı</span>
+        <span id="storage-amount" class="storage-amount">0GB / 10GB</span>
+        <span class="storage-subtext" data-i18n="storage.subtext">
+          Yer açmak için gereksiz dosyaları silebilirsin.
+        </span>
+      </div>
+
+      <div class="storage-progress">
+        <div class="storage-ring">
+  <span id="storage-percent" class="progress-percent">0%</span>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="files-area">
+    <div id="file-list" class="files-grid">
+      <!-- Dosya kartlarını JS dolduracak -->
+    </div>
+
+    <div class="bottom-actions">
+      <button id="upload-main-btn" class="btn-upload-main" data-i18n="files.uploadCta">
+        + Yeni Dosya Yükle
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="content-body gf-page hidden" data-section="upload">
+  <div class="upload-page-inner">
+    <div id="upload-card" class="upload-card">
+      <div class="upload-icon">☁️</div>
+      <div class="upload-main-text" data-i18n="upload.title">Dosya seç veya sürükleyip bırak</div>
+      <p class="upload-subtext" data-i18n="upload.subtitle">
+        maksimum boyut: 100MB | İzin verilen türler: PDF, DOCX, PNG
+      </p>
+
+      <button type="button" id="select-file-btn" class="btn-upload-main" data-i18n="upload.selectFile">
+        Dosya Seç
+      </button>
+
+      <input type="file" id="file-input" class="hidden">
+
+      <p id="upload-file-name" class="upload-file-name"></p>
+      <p id="upload-hint" class="upload-hint"></p>
+
+      <button
+        type="button"
+        id="upload-start-btn"
+        class="btn-upload-main"
+        style="margin-top: 10px;"
+        data-i18n="upload.start"
+      >
+        Yüklemeyi Başlat
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<section class="gf-page hidden" data-section="shared">
+  <div class="gf-shared-grid">
+    
+  </div>
+
+  <div class="gf-shared-grid">
+    <!-- SOL: Gönder -->
+    <div class="gf-panel">
+      <div class="gf-panel-head">
+        <div class="gf-panel-title" data-i18n="shared.send.title">Dosya Gönder</div>
+        <div class="gf-panel-desc" data-i18n="shared.send.desc">3 adım: alıcı → dosya → gönder</div>
+      </div>
+
+      <div class="gf-steps">
+        <!-- Step 1 -->
+        <div class="gf-step">
+          <div class="gf-step-badge">1</div>
+          <div class="gf-step-body">
+            <div class="gf-step-title" data-i18n="shared.send.step1.title">Alıcı e-postası</div>
+            <input id="gf-share-email" class="gf-input" type="email" placeholder="ornek@mail.com" autocomplete="email" data-i18n-placeholder="shared.send.step1.placeholder" />
+            <div class="gf-help" data-i18n="shared.send.step1.help">E-posta sadece kullanıcıyı bulmak için kullanılır.</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="gf-step">
+          <div class="gf-step-badge">2</div>
+          <div class="gf-step-body">
+            <div class="gf-step-title" data-i18n="shared.send.step2.title">Dosya seç</div>
+
+            <!-- My files picker -->
+            <div id="gf-share-files" class="gf-share-files">
+              <div class="gf-muted" data-i18n="shared.send.loadingFiles">Dosyaların yükleniyor…</div>
+            </div>
+
+            <div class="gf-row">
+              <button id="gf-share-refresh" class="gf-btn gf-btn-secondary" type="button" data-i18n="shared.send.refresh">Listeyi Yenile</button>
+            </div>
+
+            <div class="gf-help" data-i18n="shared.send.step2.help">Not: Burada “Dosyalarım” içinden seçim yapıyoruz (yeni upload değil).</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="gf-step">
+          <div class="gf-step-badge">3</div>
+          <div class="gf-step-body">
+            <div class="gf-step-title" data-i18n="shared.send.step3.title">Gönder</div>
+
+            <div class="gf-row">
+              <button id="gf-share-send" class="gf-btn gf-btn-primary" type="button" disabled data-i18n="shared.send.sendBtn">Dosyayı Gönder</button>
+            </div>
+
+            <div id="gf-share-status" class="gf-status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAĞ: Gelenler -->
+    <div class="gf-panel">
+      <div class="gf-panel-head">
+        <div class="gf-panel-title" data-i18n="shared.inbox.title">Gelen Dosyalar</div>
+        <div class="gf-panel-desc" data-i18n="shared.inbox.desc">Şifreli gelir → cihazında çözülür</div>
+      </div>
+
+      <div id="gf-inbox" class="gf-inbox">
+        <div class="gf-muted" data-i18n="shared.inbox.loading">Inbox yükleniyor…</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gf-page hidden" data-section="security">
+  <div class="gf-shared-header">
+
+
+  </div>
+
+  <div class="gf-shared-grid">
+    <!-- Panel: MFA -->
+    <div class="gf-panel">
+      <div class="gf-panel-head">
+        <div class="gf-panel-title" data-i18n="security.mfa.title">MFA</div>
+        <div class="gf-panel-desc" data-i18n="security.mfa.desc">MFA durumunu buradan aç/kapat.</div>
+      </div>
+
+      <div class="gf-row">
+        <div class="gf-muted" data-i18n="security.mfa.statusLabel">Durum:</div>
+        <div id="gf-mfa-badge" class="gf-status ok">Aktif</div>
+      </div>
+
+      <div class="gf-row">
+        <button id="gf-mfa-toggle" class="gf-btn gf-btn-primary" type="button" data-i18n="security.mfa.toggle">
+          MFA Aç/Kapat
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Panel: IP Rules -->
+    <div class="gf-panel" id="gf-ip-panel">
+      <div class="gf-panel-head">
+        <div class="gf-panel-title" data-i18n="security.ip.title">IP Kuralları</div>
+        <div class="gf-panel-desc" data-i18n="security.ip.desc">İzin ver / engelle listesi</div>
+      </div>
+
+      <div class="gf-row">
+        <select id="gf-ip-mode" class="gf-input" style="max-width:160px">
+          <option value="allow">ALLOW</option>
+          <option value="deny">DENY</option>
+        </select>
+        <input id="gf-ip-input" class="gf-input" type="text" placeholder="Örn: 192.168.1.10 veya 10.0.0.0/24" />
+      </div>
+
+      <div class="gf-row">
+        <button id="gf-ip-add" class="gf-btn gf-btn-primary" type="button" data-i18n="security.ip.add">
+          Ekle
+        </button>
+        <div id="gf-ip-hint" class="gf-help"></div>
+      </div>
+
+      <div id="gf-ip-list" class="gf-share-files" style="max-height:220px">
+        <div class="gf-muted" data-i18n="security.ip.loading">Kurallar yükleniyor…</div>
+      </div>
+    </div>
+
+    <!-- Panel: Session Logs -->
+    <div class="gf-panel" id="gf-sessions-panel">
+      <div class="gf-panel-head">
+        <div class="gf-panel-title" data-i18n="security.sessions.title">Oturum Günlükleri</div>
+        <div class="gf-panel-desc" data-i18n="security.sessions.desc">Son girişler</div>
+      </div>
+
+      <div id="gf-sessions" class="gf-inbox" style="max-height:260px">
+        <div class="gf-muted" data-i18n="security.sessions.loading">Yükleniyor…</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="gf-sec-status" class="gf-status" style="margin-top:12px"></div>
+</section>
+
+
+</main>
+        </div>
+
+<script src="key-client.js"></script>
+<script src="dashboard.js"></script>
+    </body>
+</html>

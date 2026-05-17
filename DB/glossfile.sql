@@ -1,0 +1,66 @@
+use glossfile;
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL,
+  email VARCHAR(100),
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE (username)
+);
+ALTER TABLE `users`
+  ADD COLUMN `storage_used_mb` DECIMAL(18,2) NOT NULL DEFAULT 0.00;
+
+CREATE TABLE shared_files (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  filename VARCHAR(255) NOT NULL,
+  filepath VARCHAR(255) NOT NULL,
+  uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE ip_blacklist (
+  id INT NOT NULL AUTO_INCREMENT,
+  ip_address VARCHAR(45) NOT NULL,
+  reason VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+ALTER TABLE ip_blacklist
+  ADD COLUMN is_active TINYINT(1) NOT NULL DEFAULT 1
+  COMMENT '0=pasif, 1=aktif';
+
+CREATE TABLE mfa_secrets (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  secret_key VARCHAR(255) NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE file_encryption_info (
+  id INT NOT NULL AUTO_INCREMENT,
+  file_id INT NOT NULL,
+  algorithm VARCHAR(50) DEFAULT 'AES-256',
+  key_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE (file_id),
+  FOREIGN KEY (file_id) REFERENCES shared_files(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+); 
+SHOW TABLES;
+
+
+USE glossfile;
+
+

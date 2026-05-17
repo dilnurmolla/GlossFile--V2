@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>GlossFile • Giriş</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <style>
+      .hidden{ display:none; }
+
+      #step2-msg{margin:6px 0 0; font-size:.95rem; opacity:.95;}
+      .error{color:#FF8A8A;}
+      .success{color:#9be29b;}
+.sr-only{
+  position:absolute!important;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);
+  white-space:nowrap;border:0;
+}
+/*erişebilir gizli label, kutu*/
+
+      button[disabled]{opacity:.6;cursor:not-allowed;}
+      :root{
+        --navy: #08243F; 
+        --navy-700: #08243F;
+        --pink:#E689B5;            /*kullanılacak renk kayitlari yapildi.*/
+        --pink-700:#D1699F;
+        --ink:#E8F0FB;
+        --line:#2b3446; 
+        --brand:#EED0F0;
+        --icon: var(--brand);
+      }
+        html,body{ height: 100% ;}
+        body{
+          margin:0;
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+          color:var(--ink); /*metin rengi*/
+          background: #02142c;
+         }
+
+    /*içeriği ortala*/
+    .auth{
+      min-height: 100vh;
+      min-height: 100dvh;
+      display:flex;
+      align-items:center; justify-content:center; 
+      padding:24px;
+    } 
+    .card{
+      width:min(92vw, 440px);
+      background: #0e2b4f;;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:12px;
+      padding:22px 20px;
+      box-shadow:none;
+      backdrop-filter: none; -webkit-backdrop-filter: none;
+    }
+    .stack{
+      width: min(92vw, 520px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+  h1,h4 { text-align:center; margin: 0 0 12px; }
+
+  h1,h2{margin:.25rem 0 1rem;}
+  h1{ font-size:28px; font-weight:800; color:#fff; }
+  h2{ font-size:20px; font-weight:700; color:#ffe4f3; }
+  h4{ margin:0 0 12px; opacity:.85; }
+     
+      
+      *,
+      *::before,
+      *::after{ box-sizing:border-box; } /*taşma durumunu engellemek adına*/     
+      
+      #step-1 { display:grid; gap:10px }
+
+      .brand-icon{
+    width:56px;
+    height:56px;
+    color:var(--icon);
+    display:block;
+    margin: 0 auto 8px;
+    opacity: .95;
+      }
+
+     input{
+  display:block;
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  background:#0B223F;
+  border:1px solid rgba(255,255,255,.06);
+  color:var(--ink);
+  font-size:16px;
+  padding:12px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+input::placeholder{ color:#BFC8D6; opacity:.9; }
+input:focus{ outline:2px solid var(--pink); border-color:transparent; }
+
+     button{
+      height:44px; border:none; border-radius:8px;
+      background:var(--pink);color:#fff;font-weight:800;letter-spacing:.2px;
+      box-shadow:none;
+      transform: none;
+      transition: background .15s ease;
+     }
+     button:hover{
+      background:var(--pink-700);
+      transform:none;
+      box-shadow:none;
+     }
+     button:active{
+      background: #c51f6a;
+     } button[disabled]{
+      opacity:.6;
+      cursor: not-allowed;
+     }
+
+     #step-1, #step-2:not(.hidden), #step-2:not(.hidden){
+      display: grid;
+      row-gap: 12px;
+      grid-auto-rows: min-content;
+     }
+
+    #step-1 p, #step-2 p{margin:0;}
+    #step-1 input, #step-1 button,
+    #step-2 input, #step-2 button {margin:0; }
+
+    .brand-title{
+      margin: 0 0 12px;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      color: var(--brand);
+      text-align: center;
+    } 
+    .brand-icon{
+      display:block;
+      margin: 0 auto 8px;
+      opacity: .95;
+    }
+    .mfa-title{
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight:700;
+      color:#ffe4f3;
+      text-align: left;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+      margin-top:6px;
+    }
+    .field-label{
+      font-size:0.95rem;
+      font-weight:600;
+      color: #E995BC;
+      letter-spacing:1px;
+    }
+    @media (max-width: 480px) {
+  .card{
+    padding:18px 16px;
+    border-radius:10px;
+  }
+
+  h1{
+    font-size:24px;
+  }
+
+  .field-label{
+    font-size:0.9rem;
+  }
+
+  button{
+    width:100%;
+    font-size:14px;
+  }
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+  </style>
+  </head>
+
+  <body>
+    <main class="auth">
+      <div class="stack">
+        <div class="brand">
+ <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <!-- Klasör gövdesi -->
+  <path d="M10 22a6 6 0 0 1 6-6h10l4 4h18a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V22z"
+        stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Kilit gövdesi -->
+  <rect x="26.5" y="30.5" width="11" height="9.5" rx="2.5"
+        stroke="currentColor" stroke-width="2.6" />
+  <!-- Kilit kemeri -->
+  <path d="M29 30.5v-2.6c0-3 2.4-5.4 5.4-5.4s5.4 2.4 5.4 5.4v2.6"
+        stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
+  <div class="brand-title">GLOSSFILE</div>
+</div>
+
+      <form id="step-1" class="card">
+<div class="field">
+  <label for="email" class="field-label">Kullanıcı Adı</label>
+<input id="email"
+      name="email"
+      type="text"
+      autocomplete="username"
+      placeholder="Kullanıcı Adı">
+    </div>
+      
+
+<div class="field">
+  <label for="password" class="field-label">Parola</label>
+  <input id="password"
+             name="password"
+             type="password"
+             autocomplete="current-password"
+             placeholder="Şifre">
+</div>
+<button id="to-step-2" type="button" class="login-btn">
+  Giriş
+</button>
+
+<p id="login-error" class="error-message hidden"></p>
+
+<p class="error-message" style="color:#c8d2e6; text-align:center;">
+  Hesabın yok mu? <a href="register.html" style="color:#ffd1e6; text-decoration:none;">Kayıt Ol</a>
+</p>
+
+</form>
+     <section id="step-2" class="card hidden">
+  <h2 class="mfa-title">MFA Doğrulama</h2>
+
+  <label class="sr-only" for="totp">Doğrulama Kodu</label>
+  <input id="totp"
+         name="totp"
+         inputmode="numeric"
+         autocomplete="one-time-code"
+         maxlength="6"
+         placeholder="123456" />
+<p id="step2-msg"></p>
+  <button id="submit-login" type="button">Girişi Tamamla</button>
+  <button id="back-to-1" type="button">← Geri</button>
+  
+
+</section>
+      
+      </div>
+      </main>
+      <script src="key-client.js"></script>
+      <script src="app.js"></script>
+</body>   
+</html>

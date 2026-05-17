@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>GlossFile - Admin Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      :root {
+        --gf-bg-main: #02142c;
+        --gf-text-main: #ffffff;
+        --gf-text-muted: #c3ccdd;
+        --gf-pink: #ff69b4;
+
+        --gf-card-bg: #071f3e;
+        --gf-border: #102347;
+        --gf-card-shadow: rgba(0, 0, 0, 0.45);
+
+        --gf-card-inner-bg: #071f3e;
+        --gf-card-inner-border: rgba(255, 255, 255, 0.06);
+
+        --gf-green: #2ecc71;
+        --gf-red: #ff6b81;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+          sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: var(--gf-bg-main);
+        color: var(--gf-text-main);
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .admin-shell {
+        width: 100%;
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 24px 28px 28px;
+        background: var(--gf-card-bg);
+        border-radius: 24px;
+        box-shadow: 0 18px 35px var(--gf-card-shadow);
+        border: 1px solid var(--gf-border);
+      }
+
+      .admin-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+
+      .back-link {
+        color: var(--gf-text-muted);
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .admin-header {
+        text-align: center;
+        margin-bottom: 18px;
+      }
+
+      .admin-title {
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--gf-pink);
+        margin-bottom: 6px;
+      }
+
+      .admin-subtitle {
+        font-size: 13px;
+        color: var(--gf-text-muted);
+      }
+
+      .top-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin: 16px 0 10px;
+      }
+
+      .stat-card {
+        background: #061b35;
+        border-radius: 18px;
+        border: 1px solid var(--gf-card-inner-border);
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--gf-text-muted);
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .stat-note {
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .admin-sections {
+        margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .admin-section-card {
+        background: var(--gf-card-inner-bg);
+        border-radius: 18px;
+        border: 1px solid var(--gf-card-inner-border);
+        padding: 14px 16px 12px;
+        box-shadow: 0 14px 30px var(--gf-card-shadow);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .section-title span {
+        color: var(--gf-pink);
+      }
+
+      .section-meta {
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .gf-table-wrap {
+        margin-top: 6px;
+        overflow-x: auto;
+      }
+
+      table.gf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .gf-table thead {
+        background: #041529;
+      }
+
+      .gf-table th,
+      .gf-table td {
+        padding: 7px 9px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .gf-table th {
+        text-align: left;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .gf-table tbody tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .gf-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .tag-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        border: 1px solid transparent;
+      }
+
+      .tag-encrypted {
+        background: rgba(46, 204, 113, 0.12);
+        color: #a7f5c7;
+        border-color: rgba(46, 204, 113, 0.35);
+      }
+
+      .tag-plain {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--gf-text-muted);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .btn-pill {
+        padding: 4px 9px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: transparent;
+        color: var(--gf-text-main);
+        font-size: 11px;
+        cursor: pointer;
+        transition: background 0.12s ease, transform 0.08s ease,
+          border-color 0.12s ease;
+      }
+
+      .btn-pill:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-1px);
+      }
+
+      .btn-pill-danger {
+        border-color: rgba(255, 107, 129, 0.9);
+        color: #ffb3c0;
+      }
+
+      .btn-pill-danger:hover {
+        background: rgba(255, 75, 92, 0.16);
+      }
+
+      .ip-muted {
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .empty-row {
+        text-align: center;
+        font-size: 13px;
+        color: var(--gf-text-muted);
+        padding: 12px 8px;
+      }
+
+      /* Yeni kullanıcı formu */
+      .new-user-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 8px;
+        align-items: flex-end;
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .form-label {
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .form-input {
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0b223f;
+        color: var(--gf-text-main);
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+
+      .form-input::placeholder {
+        color: #98a3bd;
+      }
+
+      .form-input:focus {
+        outline: 2px solid var(--gf-pink);
+        border-color: transparent;
+      }
+
+      .form-inline {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .form-inline input[type='checkbox'] {
+        width: 14px;
+        height: 14px;
+      }
+
+      .btn-create-user {
+        height: 36px;
+        border-radius: 999px;
+        border: none;
+        padding: 0 16px;
+        font-size: 13px;
+        font-weight: 500;
+        background: var(--gf-pink);
+        color: #fff;
+        cursor: pointer;
+        transition: opacity 0.12s ease, transform 0.08s ease;
+      }
+
+      .btn-create-user:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .create-user-msg {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--gf-text-muted);
+      }
+
+      .create-user-msg.error {
+        color: #ffb3c0;
+      }
+
+      .create-user-msg.success {
+        color: #a7f5c7;
+      }
+
+      @media (max-width: 900px) {
+        .new-user-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 14px;
+          align-items: flex-start;
+        }
+
+        .admin-shell {
+          padding: 18px 16px 22px;
+          border-radius: 20px;
+        }
+
+        .top-stats {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="admin-shell">
+      <div class="admin-topbar">
+        <a href="dashboard.html" class="back-link">Geri Dön</a>
+      </div>
+
+      <header class="admin-header">
+        <div class="admin-title">ADMIN PANEL</div>
+        <p class="admin-subtitle">
+          Kullanıcıları, dosyaları ve IP kara listesini buradan yönetebilirsin.
+        </p>
+      </header>
+
+      <section class="top-stats">
+        <article class="stat-card">
+          <div class="stat-label">Toplam Kullanıcı</div>
+          <div id="stat-total-users" class="stat-value">0</div>
+          <div class="stat-note">
+            Aktif hesapların toplam sayısı. Adminler bu sayıya dahildir.
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-label">Engellenen IP</div>
+          <div id="stat-blocked-ips" class="stat-value">0</div>
+          <div class="stat-note">
+            Şu anda IP kara listesinde bulunan istemci sayısı.
+          </div>
+        </article>
+      </section>
+
+      <section class="admin-sections">
+        <!-- YENİ KULLANICI OLUŞTUR -->
+        <article class="admin-section-card">
+          <div class="section-header">
+            <h2 class="section-title">Yeni Kullanıcı Oluştur</h2>
+            <div class="section-meta">
+            </div>
+          </div>
+
+          <div class="new-user-grid">
+            <div class="form-field">
+              <label for="new-username" class="form-label">Kullanıcı Adı</label>
+              <input
+                id="new-username"
+                type="text"
+                class="form-input"
+                placeholder="ornek_kullanici"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="new-email" class="form-label">E-posta</label>
+              <input
+                id="new-email"
+                type="email"
+                class="form-input"
+                placeholder="kullanici@ornek.com"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="new-password" class="form-label">Geçici Şifre</label>
+              <input
+                id="new-password"
+                type="password"
+                class="form-input"
+                placeholder="En az 8 karakter"
+              />
+            </div>
+          </div>
+
+          <div
+            style="
+              margin-top: 10px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 8px;
+              flex-wrap: wrap;
+            "
+          >
+            <label class="form-inline">
+              <input type="checkbox" id="new-is-admin" />
+              <span>Bu kullanıcı admin olsun</span>
+            </label>
+
+            <button id="create-user-btn" class="btn-create-user">
+              Kullanıcıyı Oluştur
+            </button>
+          </div>
+
+          <p id="create-user-msg" class="create-user-msg">
+            Yeni kullanıcı eklemek için bilgileri doldurup butona tıklayın.
+          </p>
+        </article>
+
+        <!-- Kullanıcı Listesi -->
+        <article class="admin-section-card">
+          <div class="section-header">
+            <h2 class="section-title">
+              Kullanıcı Listesi <span>(son oturumlar)</span>
+            </h2>
+            <div class="section-meta" id="user-count-label">
+              0 kullanıcı listelendi
+            </div>
+          </div>
+
+          <div class="gf-table-wrap">
+            <table class="gf-table">
+              <thead>
+                <tr>
+                  <th>Kullanıcı Adı</th>
+                  <th>E-posta</th>
+                  <th>Son IP</th>
+                  <th>Durum</th>
+                  <th style="width: 120px">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="admin-user-rows">
+                <tr>
+                  <td colspan="5" class="empty-row">
+                    Kullanıcı bilgileri yükleniyor...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <!-- Dosya Listesi -->
+        <article class="admin-section-card">
+          <div class="section-header">
+            <h2 class="section-title">
+              Dosya Listesi <span>(tüm kullanıcılar)</span>
+            </h2>
+            <div class="section-meta" id="file-count-label">
+              0 dosya listelendi
+            </div>
+          </div>
+
+          <div class="gf-table-wrap">
+            <table class="gf-table">
+              <thead>
+                <tr>
+                  <th>Dosya Adı</th>
+                  <th>Boyut</th>
+                  <th>Yükleyen</th>
+                  <th>Yüklenme Tarihi</th>
+                  <th>Durum</th>
+                  <th style="width: 120px">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="admin-file-rows">
+                <tr>
+                  <td colspan="6" class="empty-row">
+                    Dosya listesi yükleniyor...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

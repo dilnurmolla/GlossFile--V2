@@ -1,0 +1,26 @@
+{
+  "name": "glossfile",
+  "productName": "glossfile",
+  "version": "1.0.0",
+  "description": "GlossFile web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": "dilnurmolla",
+  "license": "MIT",
+  "config": {},
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^7.0.11",
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0"
+  }
+}
